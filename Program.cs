@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
 
@@ -24,6 +26,7 @@ namespace LabyrinthsStack
         {
             var ret = _list.Last.Value;
             _list.RemoveLast();
+            // Thread.Sleep(10);
             return ret;
         }
 
@@ -234,7 +237,7 @@ namespace LabyrinthsStack
                 Move(Invert(direction), false);
             }
 
-            return Direction.None;
+            return direction;
         }
 
         public bool LeftHandMove()
@@ -323,9 +326,19 @@ namespace LabyrinthsStack
             myLabyrinth = new Labyrinth(matrix, new Point(startCol, startRow));
             netLabyrinth = new Labyrinth(matrix, new Point(startCol, startRow), false);
             
-//            var sw = new Stopwatch();
-//            sw.Start();
+            var sw = new Stopwatch();
+            sw.Start();
             Console.WriteLine(myLabyrinth.Walk());
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedTicks);
+            var myTime = sw.ElapsedTicks;
+            sw.Restart();
+            Console.WriteLine(netLabyrinth.Walk());
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedTicks);
+            Console.Write("My algorithm is slower on ");
+            Console.Write(myTime - sw.ElapsedTicks);
+            Console.Write(" ticks.");
         }
     }
 }
